@@ -1,0 +1,33 @@
+version: '3'
+services:
+  mysql-server:
+    build:
+      dockerfile: mysql.Dockerfile
+      context: .
+    command: --max_allowed_packet=67108864
+    restart: always
+    volumes:
+      # this style the data is attached to the container /var/lib/mysql directory
+      # - dbdata:/var/lib/mysql
+      # this style is storing the data on the host machine (the machine where you run docker-compose up)
+      - ./serverdatabase:/var/lib/mysql # this will creata a folder "serverdatabase" automatically and copies the contents of /var/lib/mysql
+    ports:
+      - "3306:3306"
+  phpadminsrv:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpadminsrv
+    depends_on:
+      - mysql-server
+    environment:
+      PMA_HOST: mysql-server
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8080:80
+    # When you login use - root
+    # password is "mypassword"
+    # Server: mysql-server
+#the below part is not needed if you want to store the persistent data on the machine host
+# volumes:
+  # dbdata:
