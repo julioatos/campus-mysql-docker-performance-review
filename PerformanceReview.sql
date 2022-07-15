@@ -153,6 +153,6 @@ DELIMITER ;
 
 CREATE VIEW UserView AS
 SELECT u.Id, u.Name, count(ur.IdUser) as Roles, timestampdiff(YEAR, u.FechaNacimiento, curdate()) as Age
-FROM User u INNER JOIN UserRole ur ON u.Id = ur.IdUser group by u.Id;
+FROM User u LEFT JOIN UserRole ur ON u.Id = ur.IdUser group by u.Id;
 
 ------------------------------------------------------------------------------------
